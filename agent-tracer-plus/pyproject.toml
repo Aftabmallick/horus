@@ -1,0 +1,107 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-tracer-plus"
+dynamic = ["version"]
+description = "Production-grade auto-capture tracing for AI agents — zero code changes, 13 storage backends, distributed tracing"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.9"
+authors = [{ name = "Aftab Mallick" }]
+keywords = ["agent", "tracing", "observability", "llm", "opentelemetry", "ai", "langchain", "openai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Monitoring",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "aiosqlite>=0.19.0",
+]
+
+[project.optional-dependencies]
+postgres = ["asyncpg>=0.29.0"]
+mongodb = ["motor>=3.3.0"]
+clickhouse = ["clickhouse-connect>=0.7.0"]
+s3 = ["aiobotocore>=2.9.0"]
+redis = ["redis[hiredis]>=5.0.0"]
+elasticsearch = ["elasticsearch[async]>=8.0.0"]
+kafka = ["aiokafka>=0.9.0"]
+otel = ["opentelemetry-api>=1.20.0", "opentelemetry-sdk>=1.20.0"]
+search = ["sentence-transformers>=2.2.0", "numpy>=1.24.0"]
+carbon = ["codecarbon>=2.3.0"]
+security = ["cryptography>=41.0.0"]
+prometheus = ["prometheus-client>=0.19.0"]
+multimodal = ["Pillow>=10.0.0"]
+carbon-live = ["aiohttp>=3.9.0"]
+ui = ["fastapi>=0.100", "uvicorn>=0.23.0"]
+gcs = ["gcloud-aio-storage>=9.2.0"]
+azure = ["azure-storage-blob>=12.18.0"]
+prod = [
+    "agent-tracer-plus[postgres,mongodb,clickhouse,s3,gcs,azure,redis,elasticsearch,kafka,otel,security,prometheus]"
+]
+all = [
+    "agent-tracer-plus[postgres,mongodb,clickhouse,s3,gcs,azure,redis,elasticsearch,kafka,otel,search,carbon,security,prometheus,multimodal,carbon-live,ui]",
+]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+    "pytest-cov>=4.0",
+    "mypy>=1.5",
+    "ruff>=0.1.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/aftabmallick/agent-tracer-plus"
+Documentation = "https://agent-tracer-plus.readthedocs.io"
+Repository = "https://github.com/aftabmallick/agent-tracer-plus"
+Issues = "https://github.com/aftabmallick/agent-tracer-plus/issues"
+
+[project.scripts]
+agent-tracer-plus = "agent_tracer_plus.cli.__main__:main"
+
+[project.entry-points."pytest11"]
+agent_tracer_plus = "agent_tracer_plus.testing.pytest_plugin"
+
+[project.entry-points."agent_tracer_plus.plugins"]
+# Built-in example plugin — demonstrates the plugin interface.
+# Third-party plugins register here in their own packages:
+#   my_plugin = "my_package.plugin:MyPlugin"
+# agent_tracer_plus_example = "agent_tracer_plus.plugins.base:ExamplePlugin"
+
+[tool.hatch.version]
+path = "src/agent_tracer_plus/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_tracer_plus"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests as integration tests (require optional deps or real infra)",
+    "unit: marks tests as pure unit tests (no external dependencies)",
+]
+
+[tool.mypy]
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM"]

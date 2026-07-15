@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-worker
+  labels:
+    app: agent-tracer-worker
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  selector:
+    matchLabels:
+      app: agent-tracer-worker
+  template:
+    metadata:
+      labels:
+        app: agent-tracer-worker
+    spec:
+      containers:
+        - name: worker
+          image: "{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag }}"
+          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+          env:
+            - name: ENVIRONMENT
+              value: {{ .Values.global.environment }}
+            - name: DATABASE_URL
+              value: "postgresql://postgres:{{ .Values.postgres.password }}@{{ .Release.Name }}-postgres:5432/{{ .Values.postgres.database }}"
+            - name: CLICKHOUSE_URL
+              value: "clickhouse://default:{{ .Values.clickhouse.password }}@{{ .Release.Name }}-clickhouse:9000"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Release.Name }}-kafka:9092"
+            - name: QDRANT_URL
+              value: "http://{{ .Release.Name }}-qdrant:6333"
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}

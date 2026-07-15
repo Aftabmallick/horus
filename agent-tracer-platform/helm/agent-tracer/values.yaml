@@ -1,0 +1,64 @@
+# Default values for agent-tracer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  environment: production
+  secretKey: "CHANGE_ME_IN_PRODUCTION"
+
+api:
+  replicaCount: 2
+  image:
+    repository: agent-tracer-api
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 8000
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+worker:
+  replicaCount: 3
+  image:
+    repository: agent-tracer-worker
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+ui:
+  replicaCount: 1
+  image:
+    repository: agent-tracer-ui
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  service:
+    type: LoadBalancer
+    port: 80
+
+# Infrastructure Dependencies
+postgres:
+  enabled: true
+  password: "supersecretpostgres"
+  database: "agent_tracer"
+
+clickhouse:
+  enabled: true
+  password: "supersecretclickhouse"
+
+kafka:
+  enabled: true
+
+qdrant:
+  enabled: true

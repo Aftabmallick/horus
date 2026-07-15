@@ -1,0 +1,9 @@
+# Platform Worker Dependencies
+asyncpg==0.29.0
+aiokafka==0.10.0
+clickhouse-connect==0.7.3
+pydantic==2.7.4
+qdrant-client==1.9.1
+openai==1.33.0
+
+litellm

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package telemetry;
+
+service IngestionService {
+  rpc IngestTrace (TracePayload) returns (IngestResponse) {}
+  rpc IngestSpan (SpanPayload) returns (IngestResponse) {}
+}
+
+message TracePayload {
+  string trace_id = 1;
+  string session_id = 2;
+  string project_id = 3;
+  string tenant_id = 4;
+  string trace_name = 5;
+  string status = 6;
+  string start_time = 7;
+  string end_time = 8;
+  string input = 9;
+  string output = 10;
+  string error_message = 11;
+  int32 total_tokens = 12;
+  double total_cost = 13;
+}
+
+message SpanPayload {
+  string span_id = 1;
+  string trace_id = 2;
+  string parent_id = 3;
+  string name = 4;
+  string span_type = 5;
+  string status = 6;
+  string start_time = 7;
+  string end_time = 8;
+  string input = 9;
+  string output = 10;
+  string error_message = 11;
+  int32 total_tokens = 12;
+}
+
+message IngestResponse {
+  bool success = 1;
+  string message = 2;
+}

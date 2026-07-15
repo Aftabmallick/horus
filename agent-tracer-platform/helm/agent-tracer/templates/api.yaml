@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-api
+  labels:
+    app: agent-tracer-api
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app: agent-tracer-api
+  template:
+    metadata:
+      labels:
+        app: agent-tracer-api
+    spec:
+      containers:
+        - name: api
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ENVIRONMENT
+              value: {{ .Values.global.environment }}
+            - name: SECRET_KEY
+              value: {{ .Values.global.secretKey }}
+            - name: DATABASE_URL
+              value: "postgresql://postgres:{{ .Values.postgres.password }}@{{ .Release.Name }}-postgres:5432/{{ .Values.postgres.database }}"
+            - name: CLICKHOUSE_URL
+              value: "clickhouse://default:{{ .Values.clickhouse.password }}@{{ .Release.Name }}-clickhouse:9000"
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              value: "{{ .Release.Name }}-kafka:9092"
+            - name: QDRANT_URL
+              value: "http://{{ .Release.Name }}-qdrant:6333"
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-api
+spec:
+  type: {{ .Values.api.service.type }}
+  ports:
+    - port: {{ .Values.api.service.port }}
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app: agent-tracer-api

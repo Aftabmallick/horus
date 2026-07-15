@@ -1,0 +1,67 @@
+{
+  "trace": {
+    "trace_id": "019f21bcb8faa6dcd00ba67f74e22517",
+    "execution_id": "e2484190-50cc-4d56-baf0-e39f9c07ad5f",
+    "agent_name": "MyAwesomeAgent",
+    "service_name": "demo-app",
+    "session_id": "",
+    "tenant_id": "",
+    "started_at": "2026-07-02T07:40:01.545314+00:00",
+    "ended_at": null,
+    "duration_ms": 100.753,
+    "status": "RUNNING",
+    "metadata": {},
+    "tags": [],
+    "total_tokens": 0,
+    "total_cost": 0.0,
+    "span_count": 0,
+    "error_count": 0
+  },
+  "spans": [
+    {
+      "span_id": "cec2d8e47f975367",
+      "trace_id": "019f21bcb8faa6dcd00ba67f74e22517",
+      "parent_span_id": null,
+      "name": "MyAwesomeAgent",
+      "span_type": "CUSTOM",
+      "started_at": "2026-07-02T07:40:01.545210+00:00",
+      "ended_at": null,
+      "duration_ms": 100.624,
+      "status": "RUNNING",
+      "attributes": {},
+      "events": [],
+      "links": [],
+      "service_name": ""
+    },
+    {
+      "span_id": "d1824c176bf7b225",
+      "trace_id": "019f21bcb8faa6dcd00ba67f74e22517",
+      "parent_span_id": "cec2d8e47f975367",
+      "name": "search_db",
+      "span_type": "CUSTOM",
+      "started_at": "2026-07-02T07:40:01.545215+00:00",
+      "ended_at": null,
+      "duration_ms": 0.029,
+      "status": "RUNNING",
+      "attributes": {},
+      "events": [],
+      "links": [],
+      "service_name": ""
+    },
+    {
+      "span_id": "0c6decafdbefd99b",
+      "trace_id": "019f21bcb8faa6dcd00ba67f74e22517",
+      "parent_span_id": "cec2d8e47f975367",
+      "name": "process_data",
+      "span_type": "CUSTOM",
+      "started_at": "2026-07-02T07:40:01.545218+00:00",
+      "ended_at": null,
+      "duration_ms": 100.517,
+      "status": "RUNNING",
+      "attributes": {},
+      "events": [],
+      "links": [],
+      "service_name": ""
+    }
+  ]
+}
